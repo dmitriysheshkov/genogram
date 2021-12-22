@@ -33,7 +33,29 @@ img {
   }
 
 body {
+    width: 100vw;
+    height: 100vh;
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
+    overflow: hidden;
 }
+
+.dark {
+    background-color: rgb(38,38,38);
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+#canvasBG {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* test styles */
