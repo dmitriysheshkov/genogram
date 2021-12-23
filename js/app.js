@@ -41,7 +41,7 @@ class Element {
     }
 
     draw() {
-        ctx.scale(scale, scale);
+        // ctx.scale(scale, scale);
         console.log(scale);
         ctx.fillStyle = this.color;
         ctx.beginPath();
@@ -132,6 +132,9 @@ window.addEventListener('keydown', (event)=> {
     if (event.code === 'ArrowUp') globalY -= step;
     if (event.code === 'ArrowDown') globalY +=step;
 
+    shiftX = globalX;
+    shiftY = globalY;
+    
     appData.isChanges = true;
     
 });
