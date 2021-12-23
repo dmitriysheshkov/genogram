@@ -1,91 +1,84 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-// максимальное значение координат по X и Y
-let maxX, maxY;
-
-// координаты мыши на канвасе
-const data = {
-    mxClick: undefined,
-    myClick: undefined,
-    mxMove: undefined,
-    myMove: undefined,
-    changes: false
+const appData = {
+    elements: [],
+    isChanges: true
 };
 
-// задаём размеры канваса вначале и в результате любого изменения окна браузера
-// эту же функцию можно вызывать для очистки canvas, т.к. при любых изменениях ширины или высоты
-// (даже на те же самые) происходит очистка canvas
-function resize() {
-    // определяем или переопределяем (при изменении окна браузера) максимальные значения координат X и Y 
-    maxX = window.innerWidth;
+let maxX = window.innerWidth,
     maxY = window.innerHeight;
 
-    this.canvas.width = maxX;
-    this.canvas.height = maxY;
-
-    render();
-}
-
-resize();
-
-// служебные функции
-// рандомное целое число в диапазоне от до включительно
-function getRandomIntRange(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-// получить текущий канвас
-function getCanvas () {
-
-    const arrayX = [],
-          arrayY = [];
-
-    for(let i = 0; i < 20; i++) {
-        let x = getRandomIntRange(0, maxX);
-        let y = getRandomIntRange(0, maxY);
-
-        arrayX.push(x);
-        arrayY.push(y);
+class Element {
+    constructor(x, y, width, height, color) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.color = color;
     }
 
-    arrayX.forEach((item, i, arrayX) => {
-        ctx.fillStyle = 'blue';
+    draw() {
+        ctx.fillStyle = this.color;
         ctx.beginPath();
-        ctx.arc(item, arrayY[i], 20, 0, Math.PI * 2);
-        ctx.fill();
-    });
-
-    console.log(arrayX);
-    console.log(arrayY);
-
-    data.changes = false;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
 }
 
-// отрисовать текущий канвас
-function render() {
+const element1 = new Element(maxX / 2 - 100, maxY / 2 - 100, 200, 200, 'tomato');
 
-    if (data.changes) {
+function animation(obj) {
+    const { update, clear, render } = obj;
+
+    requestAnimationFrame(tick);
+    render();
+
+    function tick() {
+
+        if (appData.isChanges) {
+
+            update();
+            clear();
+            render();
+
+            appData.isChanges = false;
+        }
+
+        requestAnimationFrame(tick);
+    } 
+}
+
+animation({
+    
+    update() {
+
+        // проверим не ресайз окна
+        if ( appData.isChanges || window.innerWidth != maxX || window.innerHeight != maxY) {
+            maxX = window.innerWidth;
+            maxY = window.innerHeight;
+
+            canvas.width = maxX;
+            canvas.height = maxY;
+        }
+
+        // element1
+        element1.x = maxX / 2 - 100;
+        element1.y = maxY / 2 - 100;
+    },
+
+    clear() {
         ctx.clearRect(0, 0, maxX, maxY);
-        getCanvas (); 
+    },
+
+    render() {
+        // ctx.fillStyle = 'tomato';
+        // ctx.beginPath();
+        // ctx.fillRect(maxX / 2 - 100, maxY / 2 - 100, 200, 200);
+
+        element1.draw();
     }
 
-    requestAnimationFrame(render);
-}
-
-// слушатели
-// отслеживаем изменение размера окна браузера
-window.addEventListener('resize', ()=> this.resize());
-
-// mouse parameters
-canvas.addEventListener('click', (event)=> {
-    data.mxClick = event.x;
-    data.myClick = event.y;
-
-    data.changes = true;
 });
 
-canvas.addEventListener('mousemove', (event)=> {
-    data.mxMove = event.x;
-    data.myMove = event.y;
-});
+// listeners
+window.addEventListener('resize', ()=> { appData.isChanges = true; });
