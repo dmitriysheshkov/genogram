@@ -18,16 +18,7 @@ let globalX = 0,
     shiftY = 0;
 
 const appData = {
-    elements: {
-        elements1: {
-            offsetX: 100,
-            offsetY: 100
-        },
-        elements2: {
-            offsetX: 220,
-            offsetY: 100
-        }
-    },
+    elements: [],
     isChanges: true
 };
 
@@ -40,30 +31,15 @@ class Element {
         this.color = color;
     }
 
-    draw() {
-        // ctx.scale(scale, scale);
-        console.log(scale);
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.fillRect(globalX + this.x, globalY + this.y, this.width, this.height);
-    }
+    // draw() {
+       
+    // }
 }
 
-const element1 = new Element(
-    appData.elements.elements1.offsetX,
-    appData.elements.elements1.offsetY,
-    100,
-    100,
-    'tomato'
-);
+const element1 = new Element(100, 100, 100, 100, 'tomato');
+const element2 = new Element( 220, 100, 100, 100, 'tomato');
 
-const element2 = new Element(
-    appData.elements.elements2.offsetX,
-    appData.elements.elements2.offsetY,
-    100,
-    100,
-    'tomato'
-);
+appData.elements.push(element1, element2);
 
 function animation(obj) {
     const { update, clear, render } = obj;
@@ -116,8 +92,21 @@ animation({
     },
 
     render() {
-        element1.draw();
-        element2.draw();
+        // element1.draw();
+        // element2.draw();
+
+        ctx.scale(scale, scale);
+        // console.log(scale);
+
+        for (let i = 0; i < appData.elements.length; i++) {
+            ctx.fillStyle = appData.elements[i].color;
+            ctx.beginPath();
+            ctx.fillRect(
+                globalX + appData.elements[i].x,
+                globalY + appData.elements[i].y,
+                appData.elements[i].width,
+                appData.elements[i].height);
+        }
     }
 
 });
@@ -134,7 +123,7 @@ window.addEventListener('keydown', (event)=> {
 
     shiftX = globalX;
     shiftY = globalY;
-    
+
     appData.isChanges = true;
     
 });
