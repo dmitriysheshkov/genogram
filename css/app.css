@@ -52,6 +52,18 @@ body {
     position: relative;
 }
 
+.cursor {
+  cursor: pointer;
+}
+
+.cursor--grab {
+  cursor: grab;
+}
+
+.cursor--grabbing {
+  cursor: grabbing;
+}
+
 /* #canvasBG {
     position: absolute;
     left: 0;

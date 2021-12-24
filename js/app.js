@@ -42,6 +42,8 @@ const element2 = new Element(220, 100, 100, 100, 'tomato');
 
 appData.elements.push(element1); // , element2
 
+canvas.classList.add('cursor--grab');
+
 function animation(obj) {
     const { update, clear, render } = obj;
 
@@ -126,6 +128,10 @@ window.addEventListener('keydown', (event)=> {
 });
 
 window.addEventListener('mousedown', (event)=> {
+
+    canvas.classList.remove('cursor--grab');
+    canvas.classList.add('cursor--grabbing');
+
     isMouseDown = true;
 
     mdX = event.clientX;
@@ -144,6 +150,9 @@ window.addEventListener('mousemove', (event)=> {
 });
 
 window.addEventListener('mouseup', (event)=> {
+
+    canvas.classList.remove('cursor--grabbing');
+    canvas.classList.add('cursor--grab');
 
     isMouseUp = true;
     appData.isChanges = true;
