@@ -10,12 +10,15 @@ let globalX = 0,
     isMouseDown = false,
     isMouseMove = false,
     isMouseUp = false,
+    isMouseOut = false,
     mdX = 0,
     mdY = 0,
     mmX = 0,
     mmY = 0,
     shiftX = 0,
     shiftY = 0;
+
+const zoomIntensity = 0.2;
 
 const appData = {
     elements: [],
@@ -31,15 +34,13 @@ class Element {
         this.color = color;
     }
 
-    // draw() {
-       
-    // }
+    // draw() {}
 }
 
-const element1 = new Element(100, 100, 100, 100, 'tomato');
-const element2 = new Element( 220, 100, 100, 100, 'tomato');
+const element1 = new Element(0, 0, 100, 100, 'tomato');
+const element2 = new Element(220, 100, 100, 100, 'tomato');
 
-appData.elements.push(element1, element2);
+appData.elements.push(element1); // , element2
 
 function animation(obj) {
     const { update, clear, render } = obj;
@@ -48,6 +49,8 @@ function animation(obj) {
     render();
 
     function tick() {
+
+        if (appData.isMouseOut) {appData.isChanges = false;}
 
         if (appData.isChanges) {
 
@@ -75,28 +78,22 @@ animation({
             canvas.height = maxY;
         }
 
+        // перемещение
         if (isMouseDown && isMouseMove ) {
+            globalX = (shiftX + mmX - mdX) / scale;
+            globalY = (shiftY + mmY - mdY) / scale; 
 
-            globalX = shiftX + mmX - mdX;
-            globalY = shiftY + mmY - mdY; 
-
-            // console.log(`MD: ${ mdX }, ${ mdY } | MM: ${ mmX }, ${ mmY } | Смещение: `, mmX - mdX, mmY - mdY, `Глобал / шифт: ${ globalX }/${ shiftX }, ${ globalY }/${ shiftY }  `);
-            
-            // console.log(isMouseDown, isMouseMove);
         }
         
     },
 
     clear() {
-        ctx.clearRect(0, 0, maxX, maxY);
+        ctx.clearRect(0, 0, maxX / scale, maxY / scale);
     },
 
     render() {
-        // element1.draw();
-        // element2.draw();
 
         ctx.scale(scale, scale);
-        // console.log(scale);
 
         for (let i = 0; i < appData.elements.length; i++) {
             ctx.fillStyle = appData.elements[i].color;
@@ -155,25 +152,41 @@ window.addEventListener('mouseup', (event)=> {
     isMouseMove = false;
     isMouseUp = false;
 
-    shiftX = globalX;
-    shiftY = globalY;
-
-    // console.log(`Глобал / шифт: ${ globalX }/${ shiftX }, ${ globalY }/${ shiftY } `);
+    shiftX = globalX * scale;
+    shiftY = globalY * scale;
 });
 
 window.addEventListener('wheel', (event)=> {
 
-    let delta = event.deltaY || event.detail || event.wheelDelta;
-    // console.log(delta);
+    const wheel = event.deltaY < 0 ? -1 : 1;
+    const zoom = Math.exp( wheel * zoomIntensity );
 
-    if (delta > 0) {
-        scale += 0.05;
-    } else {
-        scale -= 0.05;
-    }
+    scale *= zoom;
+
+    // ?
+    // if (scale < 0.1) scale = 0.1; 
+    // if (scale > 5) scale = 5;
+
+    globalX -= - (mmX / (scale * zoom) - mmX / scale);
+    globalY -= - (mmY / (scale * zoom) - mmY / scale);
+
+    shiftX = globalX * scale;
+    shiftY = globalY * scale;
+
+    console.log(scale)
 
     appData.isChanges = true;
     
+});
+
+canvas.addEventListener('mouseout', (event)=> { 
+    appData.isMouseOut = true;
+    appData.isChanges = false;
+});
+
+canvas.addEventListener('mouseover', (event)=> { 
+    appData.isMouseOut = false;
+    appData.isChanges = true;
 });
 
 
