@@ -21,32 +21,55 @@ let globalX = 0,
     isMouseOut = false;
 
 const appData = {
-    elements: [],
     isChanges: true,
     zoomIntensity: 0.2
 };
 
 const persons = [
-
+    {
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        color: 'tomato',
+        testProp: {
+            a: 1,
+            b: 2
+        }
+    }
 ];
-
 class Person {
-    constructor(x, y, width, height, color) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.color = color;
+    constructor(obj) {
+        this.x = obj.x;
+        this.y = obj.y;
+        this.width = obj.width;
+        this.height = obj.height;
+        this.color = obj.color;
+        // this.testProp = obj.testProp;
     }
 
-    // draw() {}
+    draw() {
+        ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.fillRect(
+                globalX + this.x,
+                globalY + this.y,
+                this.width,
+                this.height);
+
+        // console.log(this.testProp.a);
+    }
 }
 
-const person1 = new Person(0, 0, 100, 100, 'tomato');
-const person2 = new Person(220, 100, 100, 100, 'tomato');
+const pageElements = [];
 
-persons.push(person1); // , person2
+for (let i = 0; i <  persons.length; i++) {
+    const newClass = new Person(persons[i]);
+    pageElements.push(newClass);
+}
 
+
+// --------------------------------------------------------------------------------------------------------------------------------
 function init(obj) {
     const { update, clear, render } = obj;
 
@@ -100,14 +123,8 @@ init({
 
         ctx.scale(scale, scale);
 
-        for (let i = 0; i < persons.length; i++) {
-            ctx.fillStyle = persons[i].color;
-            ctx.beginPath();
-            ctx.fillRect(
-                globalX + persons[i].x,
-                globalY + persons[i].y,
-                persons[i].width,
-                persons[i].height);
+        for (let i = 0; i < pageElements.length; i++) {
+            pageElements[i].draw();
         }
     }
 
@@ -194,5 +211,3 @@ canvas.addEventListener('mouseover', (event)=> {
     appData.isMouseOut = false;
     appData.isChanges = true;
 });
-
-
