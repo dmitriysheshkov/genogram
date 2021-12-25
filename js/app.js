@@ -1,28 +1,29 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
+canvas.classList.add('cursor--grab');
+
 let globalX = 0,
     globalY = 0,
-    step = 10,
-    scale = 1,
-    maxX = window.innerWidth,
-    maxY = window.innerHeight,
-    isMouseDown = false,
-    isMouseMove = false,
-    isMouseUp = false,
-    isMouseOut = false,
+    shiftX = 0,
+    shiftY = 0,
     mdX = 0,
     mdY = 0,
     mmX = 0,
     mmY = 0,
-    shiftX = 0,
-    shiftY = 0;
-
-const zoomIntensity = 0.2;
+    maxX = window.innerWidth,
+    maxY = window.innerHeight,
+    step = 10,
+    scale = 1,
+    isMouseDown = false,
+    isMouseMove = false,
+    isMouseUp = false,
+    isMouseOut = false;
 
 const appData = {
     elements: [],
-    isChanges: true
+    isChanges: true,
+    zoomIntensity: 0.2
 };
 
 class Element {
@@ -42,17 +43,15 @@ const element2 = new Element(220, 100, 100, 100, 'tomato');
 
 appData.elements.push(element1); // , element2
 
-canvas.classList.add('cursor--grab');
-
-function animation(obj) {
+function init(obj) {
     const { update, clear, render } = obj;
 
-    requestAnimationFrame(tick);
+    requestAnimationFrame(loop);
     render();
 
-    function tick() {
+    function loop() {
 
-        if (appData.isMouseOut) {appData.isChanges = false;}
+        if (appData.isMouseOut) { appData.isChanges = false; }
 
         if (appData.isChanges) {
 
@@ -63,11 +62,11 @@ function animation(obj) {
             appData.isChanges = false;
         }
 
-        requestAnimationFrame(tick);
+        requestAnimationFrame(loop);
     } 
 }
 
-animation({
+init({
     
     update() {
 
@@ -168,21 +167,15 @@ window.addEventListener('mouseup', (event)=> {
 window.addEventListener('wheel', (event)=> {
 
     const wheel = event.deltaY < 0 ? -1 : 1;
-    const zoom = Math.exp( wheel * zoomIntensity );
+    const zoom = Math.exp( wheel * appData.zoomIntensity );
 
     scale *= zoom;
-
-    // ?
-    // if (scale < 0.1) scale = 0.1; 
-    // if (scale > 5) scale = 5;
 
     globalX -= - (mmX / (scale * zoom) - mmX / scale);
     globalY -= - (mmY / (scale * zoom) - mmY / scale);
 
     shiftX = globalX * scale;
     shiftY = globalY * scale;
-
-    console.log(scale)
 
     appData.isChanges = true;
     
