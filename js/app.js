@@ -25,13 +25,22 @@ const appData = {
     zoomIntensity: 0.2
 };
 
+const gridData = {
+    gridSectorsX: 30,
+    gridSectorsY: 20
+};
+
 const persons = [
-    {
-        x: 0,
-        y: 0,
+    {   
+        surname: 'Фамилия',
+        name: 'Имя',
+        patronymic: 'Отчество',
+        dataOfBirth: new Date(2011, 0, 1, 0, 0, 0, 0), // 1 января 2011, 00:00:00,
+        dataOfDeath: new Date(2011, 0, 1, 0, 0, 0, 0), // 1 января 2011, 00:00:00,
+        gridPositionX: 0,
+        gridPositionY: 0,
         width: 100,
         height: 100,
-        color: 'tomato',
         testProp: {
             a: 1,
             b: 2
@@ -40,8 +49,8 @@ const persons = [
 ];
 class Person {
     constructor(obj) {
-        this.x = obj.x;
-        this.y = obj.y;
+        this.gridPositionX = obj.gridPositionX;
+        this.gridPositionY = obj.gridPositionY;
         this.width = obj.width;
         this.height = obj.height;
         this.color = obj.color;
@@ -49,15 +58,31 @@ class Person {
     }
 
     draw() {
-        ctx.fillStyle = this.color;
-            ctx.beginPath();
-            ctx.fillRect(
-                globalX + this.x,
-                globalY + this.y,
-                this.width,
-                this.height);
+        let cardSize = 300,
+            cardMargin = cardSize / 6,
+            cardColor = 'rgba(255, 255, 255, 0.01)',
+            cardImageSizeX = cardSize /100 * 43.34,
+            cardImageSizeY = cardSize /100 * 60,
+            cardImageOffsetY = cardSize / 10;
 
-        // console.log(this.testProp.a);
+
+        let cardX = globalX + ( this.gridPositionX * cardSize ),
+            cardY = globalY + ( this.gridPositionY * cardSize );
+
+        let cardCtnterX = cardX + cardMargin + cardSize / 2,
+            cardCtnterY = cardY + cardMargin + cardSize / 2;
+
+        // console.log(x, y);
+
+        ctx.fillStyle = cardColor;
+        ctx.beginPath();
+        ctx.arc(cardCtnterX, cardCtnterY, cardSize / 2, 0, 2 * Math.PI);
+        ctx.fill();
+
+        let personImage = new Image();
+        personImage.src = '/img/test-person.png';
+        ctx.drawImage(personImage, cardCtnterX - cardImageSizeX / 2, cardY + cardMargin + cardImageOffsetY, cardImageSizeX, cardImageSizeY);
+
     }
 }
 
