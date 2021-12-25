@@ -13,7 +13,7 @@ let globalX = 0,
     mmY = 0,
     maxX = window.innerWidth,
     maxY = window.innerHeight,
-    step = 10,
+    keyStep = 10,
     scale = 1,
     isMouseDown = false,
     isMouseMove = false,
@@ -26,7 +26,11 @@ const appData = {
     zoomIntensity: 0.2
 };
 
-class Element {
+const persons = [
+
+];
+
+class Person {
     constructor(x, y, width, height, color) {
         this.x = x;
         this.y = y;
@@ -38,10 +42,10 @@ class Element {
     // draw() {}
 }
 
-const element1 = new Element(0, 0, 100, 100, 'tomato');
-const element2 = new Element(220, 100, 100, 100, 'tomato');
+const person1 = new Person(0, 0, 100, 100, 'tomato');
+const person2 = new Person(220, 100, 100, 100, 'tomato');
 
-appData.elements.push(element1); // , element2
+persons.push(person1); // , person2
 
 function init(obj) {
     const { update, clear, render } = obj;
@@ -96,14 +100,14 @@ init({
 
         ctx.scale(scale, scale);
 
-        for (let i = 0; i < appData.elements.length; i++) {
-            ctx.fillStyle = appData.elements[i].color;
+        for (let i = 0; i < persons.length; i++) {
+            ctx.fillStyle = persons[i].color;
             ctx.beginPath();
             ctx.fillRect(
-                globalX + appData.elements[i].x,
-                globalY + appData.elements[i].y,
-                appData.elements[i].width,
-                appData.elements[i].height);
+                globalX + persons[i].x,
+                globalY + persons[i].y,
+                persons[i].width,
+                persons[i].height);
         }
     }
 
@@ -114,10 +118,10 @@ window.addEventListener('resize', ()=> { appData.isChanges = true; });
 
 window.addEventListener('keydown', (event)=> {
 
-    if (event.code === 'ArrowRight') globalX += step;
-    if (event.code === 'ArrowLeft') globalX -=step;
-    if (event.code === 'ArrowUp') globalY -= step;
-    if (event.code === 'ArrowDown') globalY +=step;
+    if (event.code === 'ArrowRight') globalX += keyStep;
+    if (event.code === 'ArrowLeft') globalX -=keyStep;
+    if (event.code === 'ArrowUp') globalY -= keyStep;
+    if (event.code === 'ArrowDown') globalY +=keyStep;
 
     shiftX = globalX;
     shiftY = globalY;
