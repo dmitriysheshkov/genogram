@@ -32,34 +32,19 @@ const gridData = {
 
 const persons = [
     {   
-        surname: 'Фамилия',
-        name: 'Имя',
-        patronymic: 'Отчество',
+        surname: 'Сарухутдинова',
+        name: 'Вениаммин',
+        patronymic: 'Венниаминович',
         dataOfBirth: new Date(2011, 0, 1, 0, 0, 0, 0), // 1 января 2011, 00:00:00,
-        dataOfDeath: new Date(2011, 0, 1, 0, 0, 0, 0), // 1 января 2011, 00:00:00,
+        dataOfDeath: '',
         gridPositionX: 0,
         gridPositionY: 0,
         width: 100,
-        height: 100,
-        testProp: {
-            a: 1,
-            b: 2
-        }
-    },
-    {   
-        surname: 'Фамилия',
-        name: 'Имя',
-        patronymic: 'Отчество',
-        dataOfBirth: new Date(2011, 0, 1, 0, 0, 0, 0), // 1 января 2011, 00:00:00,
-        dataOfDeath: new Date(2011, 0, 1, 0, 0, 0, 0), // 1 января 2011, 00:00:00,
-        gridPositionX: 1,
-        gridPositionY: 0,
-        width: 100,
-        height: 100,
-        testProp: {
-            a: 1,
-            b: 2
-        }
+        height: 100
+        // testProp: {
+        //     a: 1,
+        //     b: 2
+        // }
     }
 ];
 class Person {
@@ -69,6 +54,13 @@ class Person {
         this.width = obj.width;
         this.height = obj.height;
         this.color = obj.color;
+        this.surname = obj.surname;
+        this.name = obj.name;
+        this.patronymic = obj.patronymic;
+        this.dataOfBirth = obj.dataOfBirth;
+        this.dataOfDeath = obj.dataOfDeath;
+
+
         // this.testProp = obj.testProp;
     }
 
@@ -78,7 +70,7 @@ class Person {
             cardColor = 'rgba(255, 255, 255, 0.01)',
             cardImageSizeX = cardSize /100 * 43.34,
             cardImageSizeY = cardSize /100 * 60,
-            cardImageOffsetY = cardSize / 10,
+            cardImageOffsetY = cardSize / 13,
             cardIconSizeX = cardSize /100 * 13.5,
             cardIconSizeY = cardSize /100 * 13.5;
 
@@ -110,6 +102,28 @@ class Person {
         ctx.drawImage(personMediaIcon,  cardX + cardMargin + cardSize - ((cardSize / 100 * 11) * 2), cardCtnterY - cardIconSizeY / 2, cardIconSizeX, cardIconSizeY);
         
         ctx.globalAlpha = 1;
+
+        // adds text
+        function makeCardYears(y1, y2) {
+            let dates;
+
+            if (y2) {
+                dates = `${ y1.getFullYear() }-${ y1.getFullYear() }`;
+            } else {
+                dates = y1.getFullYear();
+            }
+
+            return dates;
+        }
+
+        ctx.font = '14px Roboto';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'white';
+        ctx.fillText( this.surname.toUpperCase(), cardCtnterX, cardCtnterY + cardSize / 100 * 25 );
+        ctx.fillText( this.name + ' ' + this.patronymic, cardCtnterX, cardCtnterY + cardSize / 100 * 31 );
+        ctx.fillText( makeCardYears(this.dataOfBirth, this.dataOfDeath), cardCtnterX, cardCtnterY + cardSize / 100 * 38 );
+
+        // adds connections
 
     }
 }
