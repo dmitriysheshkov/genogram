@@ -45,6 +45,21 @@ const persons = [
             a: 1,
             b: 2
         }
+    },
+    {   
+        surname: 'Фамилия',
+        name: 'Имя',
+        patronymic: 'Отчество',
+        dataOfBirth: new Date(2011, 0, 1, 0, 0, 0, 0), // 1 января 2011, 00:00:00,
+        dataOfDeath: new Date(2011, 0, 1, 0, 0, 0, 0), // 1 января 2011, 00:00:00,
+        gridPositionX: 1,
+        gridPositionY: 0,
+        width: 100,
+        height: 100,
+        testProp: {
+            a: 1,
+            b: 2
+        }
     }
 ];
 class Person {
@@ -63,16 +78,16 @@ class Person {
             cardColor = 'rgba(255, 255, 255, 0.01)',
             cardImageSizeX = cardSize /100 * 43.34,
             cardImageSizeY = cardSize /100 * 60,
-            cardImageOffsetY = cardSize / 10;
+            cardImageOffsetY = cardSize / 10,
+            cardIconSizeX = cardSize /100 * 13.5,
+            cardIconSizeY = cardSize /100 * 13.5;
 
 
-        let cardX = globalX + ( this.gridPositionX * cardSize ),
-            cardY = globalY + ( this.gridPositionY * cardSize );
+        let cardX = globalX + ( this.gridPositionX * (cardSize + cardMargin * 2 )),
+            cardY = globalY + ( this.gridPositionY * (cardSize + cardMargin * 2 ));
 
         let cardCtnterX = cardX + cardMargin + cardSize / 2,
             cardCtnterY = cardY + cardMargin + cardSize / 2;
-
-        // console.log(x, y);
 
         ctx.fillStyle = cardColor;
         ctx.beginPath();
@@ -80,8 +95,21 @@ class Person {
         ctx.fill();
 
         let personImage = new Image();
-        personImage.src = '/img/test-person.png';
+        personImage.src = 'img/test-person.png';
         ctx.drawImage(personImage, cardCtnterX - cardImageSizeX / 2, cardY + cardMargin + cardImageOffsetY, cardImageSizeX, cardImageSizeY);
+
+        // adds icons
+        ctx.globalAlpha = 0.1;
+
+        let personInfoIcon = new Image();
+        personInfoIcon.src = 'img/icon-info.svg';
+        ctx.drawImage(personInfoIcon, cardX + cardMargin + (cardSize / 100 * 8), cardCtnterY - cardIconSizeY / 2, cardIconSizeX, cardIconSizeY);
+
+        let personMediaIcon = new Image();
+        personMediaIcon.src = 'img/icon-media.svg';
+        ctx.drawImage(personMediaIcon,  cardX + cardMargin + cardSize - ((cardSize / 100 * 11) * 2), cardCtnterY - cardIconSizeY / 2, cardIconSizeX, cardIconSizeY);
+        
+        ctx.globalAlpha = 1;
 
     }
 }
