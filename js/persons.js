@@ -108,7 +108,7 @@ const persons = [
         patronymic: 'Венниаминович',
         dataOfBirth: new Date(2011, 0, 1, 0, 0, 0, 0), // 1 января 2011, 00:00:00,
         dataOfDeath: '',
-        imageURL: 'img/test-person.png',
+        imageURL: 'img/unknown.svg',
         pageURL: '',
         gridPositionX: 0.5,
         gridPositionY: 1,
