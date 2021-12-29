@@ -6,6 +6,7 @@ class Person {
         this.patronymic = obj.patronymic;
         this.dataOfBirth = obj.dataOfBirth;
         this.dataOfDeath = obj.dataOfDeath;
+        this.gender  = obj.gender;
         this.imageURL = obj.imageURL;
         this.pageURL = obj.pageURL;
         this.gridPositionX = obj.gridPositionX;
@@ -16,18 +17,18 @@ class Person {
 
     draw() {
         
-        let cardSize = 300,
+        let cardSize = appData.cardSize,
             cardMargin = cardSize / 6,
             cardColor = 'rgba(255, 255, 255, 0.01)',
-            cardImageSizeX = cardSize /100 * 43.34,
-            cardImageSizeY = cardSize /100 * 60,
+            cardImageSizeX = cardSize / 100 * 43.34,
+            cardImageSizeY = cardSize / 100 * 60,
             cardImageOffsetY = cardSize / 13,
-            cardIconSizeX = cardSize /100 * 13.5,
-            cardIconSizeY = cardSize /100 * 13.5;
+            cardIconSizeX = cardSize / 100 * 13.5,
+            cardIconSizeY = cardSize / 100 * 13.5;
 
 
-        let cardX = globalX + ( this.gridPositionX * (cardSize + cardMargin * 2 )),
-            cardY = globalY + ( this.gridPositionY * (cardSize + cardMargin * 2 ));
+        let cardX = (globalX - cardSize / 2  - cardMargin) + (cardSize + cardMargin * 2 ) * this.gridPositionX,
+            cardY = (globalY - cardSize / 2  - cardMargin) + (cardSize + cardMargin * 2 ) * this.gridPositionY;
 
         let cardCenterX = cardX + cardMargin + cardSize / 2,
             cardCenterY = cardY + cardMargin + cardSize / 2;
@@ -36,6 +37,8 @@ class Person {
         ctx.beginPath();
         ctx.arc(cardCenterX, cardCenterY, cardSize / 2, 0, 2 * Math.PI);
         ctx.fill();
+
+        
 
         let personImage = new Image();
         personImage.src = this.imageURL;
@@ -58,6 +61,8 @@ class Person {
         function makeCardYears(y1, y2) {
             let dates;
 
+            if (y1 == '') return '...';
+
             if (y2) {
                 dates = `${ y1.getFullYear() }-${ y1.getFullYear() }`;
             } else {
@@ -67,7 +72,7 @@ class Person {
             return dates;
         }
 
-        ctx.font = '14px Roboto';
+        ctx.font = `${appData.cardSize / 100 * 4.5}px Roboto`;
         ctx.textAlign = 'center';
         ctx.fillStyle = 'white';
         ctx.fillText( this.surname.toUpperCase(), cardCenterX, cardCenterY + cardSize / 100 * 25 );
@@ -94,7 +99,7 @@ class Person {
         function drawConnectionPoint(x, y) {
             ctx.fillStyle = 'white';
             ctx.beginPath();
-            ctx.arc(x, y, 4, 0, 2 * Math.PI);
+            ctx.arc(x, y, appData.cardSize / 100 * 1.3, 0, 2 * Math.PI);
             ctx.fill();
         }
 

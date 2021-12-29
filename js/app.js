@@ -39,12 +39,13 @@ init({
             canvas.height = maxY;
         }
 
-        // перемещение
+        // перемещение        
         if (isMouseDown && isMouseMove ) {
             globalX = (shiftX + mmX - mdX) / scale;
-            globalY = (shiftY + mmY - mdY) / scale; 
-
+            globalY = (shiftY + mmY - mdY) / scale;
         }
+
+        // maxX * (1 / scale) / 2
         
     },
 
@@ -89,6 +90,9 @@ window.addEventListener('mousedown', (event)=> {
 
     mdX = event.clientX;
     mdY = event.clientY;
+
+    shiftX = globalX * scale;
+    shiftY = globalY * scale;
 
     appData.isChanges = true;
 });

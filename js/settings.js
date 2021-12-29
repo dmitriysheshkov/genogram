@@ -1,15 +1,15 @@
-let globalX = 0,
-    globalY = 0,
-    shiftX = 0,
-    shiftY = 0,
+let maxX = window.innerWidth,
+    maxY = window.innerHeight,
+    scale = 1,
+    globalX = maxX * (1 / scale) / 2,
+    globalY = maxY  * (1 / scale) / 2,
+    shiftX = globalX,
+    shiftY = globalY,
     mdX = 0,
     mdY = 0,
     mmX = 0,
     mmY = 0,
-    maxX = window.innerWidth,
-    maxY = window.innerHeight,
     keyStep = 10,
-    scale = 1,
     isMouseDown = false,
     isMouseMove = false,
     isMouseUp = false,
@@ -17,7 +17,8 @@ let globalX = 0,
 
 const appData = {
     isChanges: true,
-    zoomIntensity: 0.2
+    zoomIntensity: 0.2,
+    cardSize: 300
 };
 
 const gridData = {
